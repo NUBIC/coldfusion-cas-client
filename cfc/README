@@ -1,0 +1,51 @@
+ColdFusion CAS Client Component
+===============================
+
+About
+-----
+This component is based on code written by: 
+  John Watson
+  jwatson2@ucmerced.edu
+  Univeristy of California, Merced
+
+Features
+--------
+  * This client is compliant with the CAS 2.0 Protocol specification written/tested with ColdFusion 8
+  * Single Sign Out
+  * Attributes (per JA-SIG CAS Client for Java 3.1)
+  * Proxy Ticketing Support
+  
+Installation
+------------
+1. Add this directory to the ColdFusion Server Custom Tag Paths.
+2. Copy Application.cfc-sample into your application and rename it to Application.cfc.
+3. Copy cas_workaround.cfm-sample into your application and rename it to cas_workaround.cfm
+4. Modify the configuration variables in Application.cfc as needed.  Variables are:
+  * cas_server [required] 
+    - The URL of your CAS server you wish to authenticate against.
+      (ex. cas_server = http://this.server.is/cas)
+  * service [required] 
+    - The service URL for your application. If using ColdFusion Server, you must point 
+      at cas_workaround.cfm. See cas_workaround.cfm-sample for details. 
+      (ex. service = http://localhost/my_app/cas_workaround.cfm)
+  * direct_forwarding [required] 
+    - Automatically forwards user to page requested after logging in successfully.
+      (ex. direct_forwarding = true)
+  * cas_proxy_callback_receive [optional] 
+    - The URL where the CAS server will send proxy ticket and proxy ticket IOUs. This is only
+      used when attempting to proxy authentication to another application.  
+      (ex. cas_proxy_callback_receive = http://this.server.is/cas-proxy-callback/receive_pgt)
+  * cas_proxy_callback_retrieve [optional] 
+    - The URL where the CAS client will retrieve proxy tickets. This is only when attempting to proxy 
+      authentication to another application.
+      (ex. cas_proxy_callback_retrieve = http://this.server.is/cas-proxy-callback/retrieve_pgt)
+      
+Usage
+-----
+  * The Appication.cfc file will automatically detect when a user has not authenticated
+    and redirect them to the login page.
+  * Username can be obtained by:
+    <cfinvoke component = "#Session.CFCAS#" method = "getUsername" returnVariable = "userName"/>
+  * A proxy ticket can be obtained by:
+    <cfinvoke component = "#Session.CFCAS#" method = "getProxyTicket" returnVariable = "proxyTicket"/>
+    

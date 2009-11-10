@@ -20,7 +20,7 @@
           gateway_page ['/index.cfm'] - Page to send user to after being gatewayed and not being authenticated
           renew [false] - Require primary authentication on CAS (disable single sign on) --->
   <cfset Variables.CAS_arguments = { cas_server = "http://localhost/cas", 
-                                     service = "http://localhost:8500/cfcas_test_app/cas_workaround.cfm", 
+                                     service = "http://localhost:8500/cas_client/cas_workaround.cfm", 
                                      cas_proxy_callback_receive = "http://localhost/cas-proxy-callback/receive_pgt", 
                                      cas_proxy_callback_retrieve = "http://localhost/cas-proxy-callback/retrieve_pgt", 
                                      direct_forwarding = true } />

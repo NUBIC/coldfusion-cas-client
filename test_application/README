@@ -1,0 +1,13 @@
+ColdFusion CAS Component Test App
+=================================
+
+Installation
+------------
+1. Add this entry to jrun-web.xml
+
+    <virtual-mapping>
+      <resource-path>/cfcas_test_app</resource-path>
+      <system-path>/Users/johndzak/working_copies/coldfusion_cas_client/test_application</system-path>
+    </virtual-mapping>    
+
+2. Configure your CAS server in Application.cfc
