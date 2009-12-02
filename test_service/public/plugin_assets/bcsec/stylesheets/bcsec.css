@@ -1,0 +1,73 @@
+body {
+  background-color: #393939;
+  font-size: 12px;
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0; padding: 0;
+}
+p.error {
+  text-align: center;
+  background-color: #c66;
+  color: #333;
+  margin: 1em 0;
+  padding: 1em;
+  font-size: 1.3em;
+}
+.access {
+  display: block;
+  margin: 2em 0;
+  border: solid #000;
+  border-width: 2px 0;
+  background-color: #999;
+  color: #fff;
+  width: 100%
+}
+.access .contents {
+  width: 24em;
+  margin: 0 auto;
+}
+.access h1 {
+  text-align: center;
+  font-size: 1.5em;
+  margin: 1em;
+  padding: 0;
+}
+.access a {
+  color: #fff;
+}
+.access a:visited {
+  color: #eed;
+}
+.access a:hover {
+  color: #fff;
+  background-color: #aa9;
+}
+.access .row {
+  margin: 0.5em;
+}
+.access .row:after {
+  display: block;
+  content: " ";
+  clear: both;
+  visibility: hidden;
+  height: 0;
+}
+.access .label {
+  text-align: right;
+  height: 2em;
+  font-weight: bold;
+  float: left;
+  width: 6em;
+  padding-top: 6px;
+}
+.access .value {
+  margin-left: 6.5em;
+}
+.access .text {
+  border: 1px solid #393939;
+  padding: 2px;
+}
+.access .button {
+  border: 1px outset #393939;
+  background-color: #393939;
+  color: #ddd;
+}

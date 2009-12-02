@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Please log in</title>
+    <%= stylesheet_link_tag "/plugin_assets/bcsec/stylesheets/bcsec" %>
+  </head>
+  <body>
+    <% form_tag login_path, :id => 'login', :class => 'access' do -%>
+      <h1>Please log in</h1>
+      <% if flash[:error] -%><p class="error"><%= flash[:error] -%></p><% end %>
+      <div class="contents">
+        <div class="row">
+          <div class="label"><label for="username">Username</label></div>
+          <div class="value"><%= text_field_tag :username, params[:username], :class => 'text' %></div>
+        </div>
+        <div class="row">
+          <div class="label"><label for="password">Password</label></div>
+          <div class="value"><%= password_field_tag :password, nil, :class => 'text' %></div>
+        </div>
+        <div class="row">
+          <div class="value"><%= submit_tag "Log in", :class => 'button' %></div>
+        </div>
+      </div>
+    <% end %>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+require 'rake'
+require 'rake/testtask'
+require 'rake/rdoctask'
+require 'ci/reporter/rake/test_unit'
+
+desc 'Default: run unit tests.'
+task :default => :test
+
+desc 'Test the bcsec plugin.'
+Rake::TestTask.new(:test) do |t|
+  cd('../../..') do
+    # This task is provided by the plugin, but isn't available here
+    `rake test:plugins:setup_plugin_fixtures`
+  end
+  t.libs << 'lib'
+  t.pattern = 'test/**/*_test.rb'
+  t.verbose = true
+end
+
+desc 'Generate documentation for the bcsec plugin.'
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'Bcsec'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end

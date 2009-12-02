@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>Logged in</title>
+    <%= stylesheet_link_tag "/plugin_assets/bcsec/stylesheets/bcsec" %>
+  </head>
+  <body>
+    <div class="access">
+      <h1>Logged in successfully</h1>
+      <div class="contents">
+        <p>Logged in as <%= current_user.full_name %>.</p>
+        <p>
+          Developers: replace this page either by specifying a <code>login_target</code> 
+          route in routes.rb (preferred) 
+          or <a href="http://rails-engines.org/news/2009/02/02/engines-in-rails-2-3/">overloading</a> 
+          <code>access/logged_in.rhtml</code>.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

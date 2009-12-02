@@ -1,0 +1,158 @@
+Bcsec
+=====
+
+DEPENDENCIES
+------------
+
+Before you use this plugin, the bcsec plugin depends on the bcsec gem.  You can install it like so:
+
+  $ sudo gem install bcsec --source http://download.bioinformatics.northwestern.edu/gems
+
+CONFIGURATION
+-------------
+
+Different parts of bcsec require different global config variables to be set.
+These should be set in your rails environment; i.e., either in a file under 
+config/initializers (for configuration that is the same no matter the profile)
+or in each of the per-env configuration files (under config/environments/).
+
+Bcsec is configured using a DSL which is invoked by passing a block to the
+`Bcsec.configure` method.  Multiple invocations of `configure` are cumulative.
+
+=== Sample conf/initializers/bcsec.rb file
+
+Bcsec.configure do
+  # The portal used to identify this app in 
+  # t_security_logins, t_security_applications, etc.
+  portal :ENU
+
+  # The name of this specific application.
+  # Only needed for rlogin; is used informationally only.
+  app_name :"MouseDB on Rails"
+end
+
+=== Sample per-env additions
+
+# All Bcsec configuration needs to go in the after_initialize block
+# If you already have an after_initialize block, add the configuration 
+# to that -- you can only have one block per environment.
+config.after_initialize do
+  Bcsec.configure do
+    # Provide one or more authenticators to use.
+    # See doc/authenticators for more details
+    authenticator :pers
+    
+    # Point to a bcsec central authentication parameters file for
+    # cc_pers, netid LDAP, and policy values
+    central '/etc/nubic/bcsec-prod.yml'
+    
+    # If using PersAuthenticator, set up the AR connection using the 
+    # central parameters file like so:
+    establish_cc_pers_connection
+    
+    # If you want to support rlogouts from your application, configure one or
+    # more rlogin targets.  The parameters for rlogin target are 
+    #
+    #   0) a name which will be used to refer to the target (e.g., in URLs)
+    #   1) the portal for the target
+    #   2) the URL at which the target receives rlogins
+    #   3) an optional options hash
+    #
+    # The only option currently supported is :type, which may be :default or 
+    # :cf.  See docs/rlogin for more info.
+    rlogin_target :other_target, :ENU, 'http://dev.example.com/other/rlogin'
+    rlogin_target :some_cf_target, :NOTIS, 
+        'http://dev.example.com/some/RloginEntry.cfm', :type => :cf
+  end
+end
+
+CONFIGURATION FOR CAS
+---------------------
+
+To use CAS:
+
+1.  Ensure that your bcsec central authentication parameters file contains
+    a CAS base URL and (optionally) CAS proxy callback and retrieval URLs.
+2.  Ensure that `use_cas` is in one of your bcsec configuration blocks and
+    follows the declaration of a central parameters file.
+3.  Include `Bcsec::SecuredController` into the controllers you want to secure.
+4.  Create an `app/controllers/access_controller.rb` file.  Inside this file,
+    put the following:
+
+        class AccessController < ActionController::Base
+          include Bcsec::CasSecuredControllerBehavior
+        end
+
+INTEGRATION INTO YOUR APP
+-------------------------
+
+=== Securing pages
+
+In each controller that requires a login, `include Bcsec::SecuredController`.
+If all pages need a login (likely), you can include it in your application
+controller.  To limit access to particular security groups, use the permit
+method:
+
+ permit :editor, :writer
+
+The groups are not case sensitive.  You can put that method at the top of 
+your controllers (like a filter), or inside a single action.
+
+=== Securing services
+
+Bcsec has support for using HTTP Basic authentication for certain request 
+types instead of the default login form/session mode.  By default, this is
+enabled for requests which will return JSON or YAML; you can change this by
+overriding `bcsec_mime_types_for_basic_auth`.  If you wish to disable basic 
+auth entirely, override this method to return an empty list.
+
+=== Routes
+
+Bcsec will add several routes automatically to your application, 
+/login, /logout, /rlogin, and /rlogout.
+
+=== Default post-login page
+
+You can provide an alternate default post-login page (i.e., the page the
+user is redirected to on a successful log in) by adding a route to login_target.
+
+Say if you '/patients' to be your default-login page, you would do:
+map.login_target '/patients', :controller => 'patients', :action => 'index'
+
+=== Securing parts of views
+
+You may specify that certain content in your view is only visible to members 
+of particular groups using another variation of permit:
+
+ <% permit :editor, :admin do %>
+   Secret editing controls
+ <% end %>
+
+If you are limiting to one group only, you can use a clearer variation:
+
+ <% admin_content do %>
+   Editors can't see this
+ <% end %>
+
+
+DEVELOPING THE BCSEC RAILS PLUGIN
+---------------------------------
+
+=== Running tests
+
+To set up the test harness for the bcsec Rails plugin:
+
+1.  Create a valid bcsec configuration in the host Rails application.
+
+2.  Import the cc_pers_test schema. An Oracle schema dump is included in the
+    bcsec gem distribution in the db/exports subdirectory. 
+
+    To import the schema, run
+
+        $ORACLE_HOME/bin/imp cc_pers_test@XE file=db/exports/cc_pers_test.dmp full=y
+
+    This command needs to be run either on the database server, or in an
+    environment in which the full Oracle client has been installed.  It also
+    requires the existence of a `cc_pers_test` user.
+
+3.  Run `rake test` in the bcsec plugin directory.

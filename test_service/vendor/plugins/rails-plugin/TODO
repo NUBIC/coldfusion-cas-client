@@ -1,0 +1,4 @@
+- Obey end_date, etc., on t_personnel, t_security_logins, etc.
+- Update last successful & last failed login
+- Implement lockouts
+- Logging in security_group_activities 

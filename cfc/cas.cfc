@@ -220,7 +220,7 @@
   </cffunction>
 
   <cffunction name="getProxyTicket" access="public" output="no" returntype="string" hint="Get proxy ticket">
-    <cfargument name="targetService" required="yes" type="string" default="false" hint="The service identifier of the back-end service cas is proxying authentication to" />
+    <cfargument name="targetService" required="yes" type="string" hint="The service identifier of the back-end service cas is proxying authentication to" />
 
     <cfset proxy_ticket = ""/>
 

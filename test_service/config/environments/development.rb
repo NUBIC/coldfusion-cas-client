@@ -18,14 +18,9 @@ config.action_mailer.raise_delivery_errors = false
 
 config.after_initialize do
   Bcsec.configure do
-    central {:cas => {cas_base_url: 'http://localhost/cas'}}
+    central( { :cas => { :cas_base_url => 'http://localhost/cas' } } )
     use_cas
 
-    accept_all = Class.new do
-      def may_access?(*args); true; end
-      def valid_credentials?(*args); true; end
-    end.new
-
-    authenticators authenticate_only_authenticator
+    authenticators :authenticate_only
   end
 end
