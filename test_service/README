@@ -1,7 +1,7 @@
 Test Service
 ============
 
-This app has a /whoami controller which it will respond with either
+This app has a /whoami controller which will respond to either
 html, json, or xml.
 
 Installation
