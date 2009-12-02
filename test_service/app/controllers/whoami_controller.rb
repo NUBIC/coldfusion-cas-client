@@ -11,6 +11,7 @@ class WhoamiController < ApplicationController
     respond_to do |format|
        format.html 
        format.xml  { render :xml => "<?xml version=\"1.0\" ?><user><name>#{@username}</name></user>" }
+       format.json { render :json => "({ \"username\": \"#{@username}\" })" }
      end    
   end  
 end
