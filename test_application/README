@@ -10,4 +10,4 @@ Installation
       <system-path>/Users/johndzak/working_copies/coldfusion_cas_client/test_application</system-path>
     </virtual-mapping>    
 
-2. Configure your CAS server in Application.cfc
+2. [OPTIONAL] Configure your CAS server in Application.cfc if you would like to use a local cas instance
