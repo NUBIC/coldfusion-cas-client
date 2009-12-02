@@ -19,11 +19,17 @@
           gateway [false] - Enable gatewaying
           gateway_page ['/index.cfm'] - Page to send user to after being gatewayed and not being authenticated
           renew [false] - Require primary authentication on CAS (disable single sign on) --->
-  <cfset Variables.CAS_arguments = { cas_server = "http://localhost/cas", 
+  <cfset Variables.CAS_arguments = { cas_server = "https://cas2.nubic.northwestern.edu/cas-staging/", 
+                                     service = "http://localhost:8500/cfcas_test_app/cas_workaround.cfm", 
+                                     cas_proxy_callback_receive = "https://cas2.nubic.northwestern.edu/cas-proxy-callback-staging/receive_pgt", 
+                                     cas_proxy_callback_retrieve = "https://cas2.nubic.northwestern.edu/cas-proxy-callback-staging/retrieve_pgt", 
+                                     direct_forwarding = true } />
+                                     
+   <!--- <cfset Variables.CAS_arguments = { cas_server = "http://localhost/cas", 
                                      service = "http://localhost:8500/cfcas_test_app/cas_workaround.cfm", 
                                      cas_proxy_callback_receive = "http://localhost/cas-proxy-callback/receive_pgt", 
                                      cas_proxy_callback_retrieve = "http://localhost/cas-proxy-callback/retrieve_pgt", 
-                                     direct_forwarding = true } />
+                                     direct_forwarding = true } /> --->
   
   <!--- Following is not for CAS, but an improvement of security --->
   <!--- Is this a secure site (HTTPS) - 

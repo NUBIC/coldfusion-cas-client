@@ -18,7 +18,8 @@ config.action_mailer.raise_delivery_errors = false
 
 config.after_initialize do
   Bcsec.configure do
-    central( { :cas => { :cas_base_url => 'http://localhost/cas' } } )
+    central( { :cas => { :cas_base_url => 'https://cas2.nubic.northwestern.edu/cas-staging/' } } )
+    # central( { :cas => { :cas_base_url => 'http://localhost/cas/' } } )
     use_cas
 
     authenticators :authenticate_only
