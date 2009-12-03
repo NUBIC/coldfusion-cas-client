@@ -219,36 +219,97 @@
     <cfreturn endRequest />
   </cffunction>
 
-  <cffunction name="getProxyTicket" access="public" output="no" returntype="string" hint="Get proxy ticket">
+  <cffunction name="getProxyTicket" access="public" output="yes" returntype="string" hint="Get proxy ticket">
     <cfargument name="targetService" required="yes" type="string" hint="The service identifier of the back-end service cas is proxying authentication to" />
 
     <cfset proxy_ticket = ""/>
 
-    <cfhttp url="#Variables.cas_server#proxy" method="get">
-      <cfhttpparam name="pgt" value="#Variables.proxy_granting_ticket#" type="url" />
-      <cfhttpparam name="targetService" value="#Arguments.targetService#" type="url" />
-    </cfhttp>
+    <cfinvoke method="requestProxyTicket" returnVariable="proxyTicketingResponse">
+      <cfinvokeargument 
+          name="proxyGrantingTicket" 
+          value="#Variables.proxy_granting_ticket#"/>
+                        
+      <cfinvokeargument 
+          name="targetService" 
+          value="#Arguments.targetService#"/>
+    </cfinvoke>
 
-    <cflog file="cas_client" application="no" text="#Variables.cas_server#proxy?pgt=#Variables.proxy_granting_ticket#&targetService=#Arguments.targetService# response: #cfhttp.FileContent#.">       
-      
-    <cfif IsXML(cfhttp.FileContent)>
-      <cfset XMLobj = XmlParse(cfhttp.fileContent)>
-        
-      <!--- Check for the cas:user tag --->
-      <cfset CasPtXml = XmlSearch(XMLobj, "cas:serviceResponse/cas:proxySuccess/cas:proxyTicket")>
-
-      <!--- Get the cas proxyt ticket --->
-      <cfif ArrayLen(CasPtXml)>
-       <cfset proxy_ticket = trim(CasPtXml[1].XmlText) />
-      <cfelse>
-       <cflog file="cas_client" application="no" text="Problem obtaining proxy ticket">                  
-      </cfif>
-    </cfif>
-         
-
-    <cfreturn proxy_ticket>
+    <cfinvoke method="parseProxyTicketingResponse" returnVariable="proxyTicket">
+      <cfinvokeargument
+          name="proxyTicketingResponse"
+          value="#proxyTicketingResponse#"/>
+    </cfinvoke>
+    
+    
+    <cfreturn proxyTicket/>
   </cffunction>
+  
+  <cffunction name="requestProxyTicket" access="private" output="no" returntype="string" hint="Request proxy ticket from cas server">
+    <cfargument 
+        name="proxyGrantingTicket" 
+        required="yes" 
+        type="string" 
+        hint="The Proxy Granting Ticket" />
+                
+    <cfargument 
+        name="targetService"
+        required="yes" 
+        type="string" 
+        hint="The service identifier of the back-end service cas is proxying authentication to" />
+    
+    
+    <cfhttp url="#Variables.cas_server#proxy" method="get">
+      <cfhttpparam 
+          name="pgt" 
+          value="#Arguments.proxyGrantingTicket#" 
+          type="url" />
+                   
+      <cfhttpparam 
+          name="targetService" 
+          value="#Arguments.targetService#" 
+          type="url" />
+    </cfhttp>
+    
+    <cflog 
+        text="#Variables.cas_server#proxy?pgt=#Variables.proxy_granting_ticket#&targetService=#Arguments.targetService# response: #cfhttp.FileContent#."
+        file="cas_client" 
+        application="no"/>       
+          
+    <cfif NOT IsXML(cfhttp.FileContent)>
+      <cfthrow 
+          type="CFCas.RequestException.ProxyTicket"
+          message="There was a problem requesting a proxy ticket from the CAS server."/>
+    </cfif>
+    
+    <cfreturn cfhttp.fileContent>
+  </cffunction>
+  
+  
+  <cffunction name="parseProxyTicketingResponse" access="private" output="no" returntype="string" hint="Parse proxy ticketing response from cas server">
+    <cfargument 
+        name="proxyTicketingResponse" 
+        required="yes" 
+        type="string" 
+        hint="The Proxy Ticketing Response" />
 
+    <cfset XMLobj = XmlParse(#Arguments.proxyTicketingResponse#)>      
+    <cfset CasPtXml = XmlSearch(XMLobj, "cas:serviceResponse/cas:proxySuccess/cas:proxyTicket")>
+
+    <!--- Get the cas proxy ticket --->
+    <cfif NOT ArrayLen(CasPtXml)>
+      <cflog 
+          text="Problem parsing proxy ticket"
+          file="cas_client" 
+          application="no" />
+          
+      <cfthrow 
+          type="CFCas.ParsingException.ProxyTicket"
+          message="There was a problem parsing the proxy ticketing response."/>    
+    </cfif>
+    
+    <cfreturn trim(CasPtXml[1].XmlText) />
+  </cffunction>
+  
   <!--- <cffunction name="proxyValidate" access="public" output="no" returntype="string" hint="Validates a proxy ticket for a given service">
     <cfargument name="ticket" required="yes" type="string" default="false" hint="The proxy ticket issued through getProxyTicket" />
     <cfargument name="service" required="yes" type="string" default="false" hint="The service identifier of the back-end service cas is proxying authentication to" />
