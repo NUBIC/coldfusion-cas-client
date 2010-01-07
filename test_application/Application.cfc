@@ -37,7 +37,7 @@
           "Use J2EE Session Variables" needs to be enabled --->
   <cfset Variables.secureSite = false />
   <!--- This prevents CFID and CFTOKEN being sent as cookies --->
-  <cfset THIS.setClientCookies = false />
+  <cfset THIS.setClientCookies = true />
 
   <cffunction name="onApplicationStart" returnType="boolean" output="false">
     <!--- Initialize ST to SessionID struct in Application scope for Single-Sign-Out --->

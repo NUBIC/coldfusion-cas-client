@@ -1,3 +1,6 @@
 TODO
 ====
 - Renew PGT when it expires
+- Cucumber test suite
+- Fix logout functionality
+- Refactor
