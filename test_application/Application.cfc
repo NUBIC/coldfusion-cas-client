@@ -36,7 +36,7 @@
         In CF Administrator -> Memory Variables
           "Use J2EE Session Variables" needs to be enabled --->
   <cfset Variables.secureSite = false />
-  <!--- This prevents CFID and CFTOKEN being sent as cookies --->
+  <!--- Will CFID and CFTOKEN be sent as cookies  --->
   <cfset THIS.setClientCookies = true />
 
   <cffunction name="onApplicationStart" returnType="boolean" output="false">
