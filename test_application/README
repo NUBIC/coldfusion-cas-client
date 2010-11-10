@@ -10,4 +10,6 @@ Installation
       <system-path>/Users/johndzak/working_copies/coldfusion_cas_client/test_application</system-path>
     </virtual-mapping>    
 
-2. [OPTIONAL] Configure your CAS server in Application.cfc if you would like to use a local cas instance
+2. Configure cas_server, in Application.cfc, to point to your CAS instance. 
+
+3. [Optional] If you are using proxy ticketing, cas_proxy_callback_receive and cas_proxy_callback_retrieve, in Application.cfc, to point to your proxy ticketing callback application. 

@@ -6,7 +6,7 @@ html, json, or xml.
 
 Installation
 ------------
-1. [OPTIONAL] Set your CAS server URL in config/environments/development.rb
+1. Set your CAS server URL in config/environments/development.rb
 
       example.
         central( { :cas => { :cas_base_url => 'http://localhost/cas' } } )
