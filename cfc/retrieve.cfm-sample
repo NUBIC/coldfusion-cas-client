@@ -1,0 +1,7 @@
+<cfif not StructKeyExists(Application,"PgtTicketStore") OR not IsInstanceOf(Application.PgtTicketStore,"PgtTicketStore")>
+  <cfreturn />
+</cfif>
+
+<cfset pgt = Application.PgtTicketStore.retrieve(urlParameters = URL) />
+<cfparam name="pgt" default="">
+<cfoutput>#pgt#</cfoutput>
