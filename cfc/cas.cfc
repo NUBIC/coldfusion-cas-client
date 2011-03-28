@@ -147,10 +147,10 @@
           <cflog file="cas_client" application="no" text="#Variables.cas_proxy_callback_retrieve# response: #cfhttp.FileContent#.">
             
           <!--- Verify the response contains a proxy granting ticket --->
-          <cfif REFindNoCase("^PGT-.*$", cfhttp.FileContent) IS NOT 0>
+          <cfif REFindNoCase("^[TP]GT-.*$", cfhttp.FileContent) IS NOT 0>
             <cfset proxy_granting_ticket = trim(cfhttp.FileContent)>
           <cfelse>
-            <cflog file="cas_client" application="no" text="Problem retrieving proxy granting ticket">
+            <cflog file="cas_client" application="no" text="Problem retrieving proxy granting ticket; entity does not appear to contain a PGT">
           </cfif>
         <cfelse>
           <cflog file="cas_client" application="no" text="Problem retrieving proxy granting ticket IOU">
