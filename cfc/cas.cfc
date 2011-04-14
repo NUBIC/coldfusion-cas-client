@@ -18,7 +18,6 @@
 <cfcomponent displayname="CF CAS Component" output="no" author="John Watson">
   <cffunction name="init" access="public" output="no" returntype="cas" hint="Initialize the CAS object">
     <cfargument name="cas_server" type="string" required="yes" hint="URL for the CAS server (Ex. https://cas.school.edu/cas)" />
-    <cfargument name="service" type="string" required="yes" hint="URL for the service (Ex. http://someapp.school.edu/app)" />
     <cfargument name="cas_proxy_callback_receive" type="string" required="no" hint="URL for the CAS server to issue callback requsts that include proxy granting tickets and proxy granting ticket IOUs (Ex. http://cas.school.edu/receive_pgt)" />
     <cfargument name="cas_proxy_callback_retrieve" type="string" required="no" hint="URL for the CAS server to issue callback requsts that include proxy granting tickets and proxy granting ticket IOUs (Ex. http://cas.school.edu/receive_pgt)" />
     <cfargument name="final_page" type="string" required="no" default="" hint="If 'direct_forwarding' is disabled, redirect user to this page" />
@@ -30,7 +29,6 @@
     <cfargument name="isCAS3" type="boolean" required="no" default="true" hint="Is this a CAS3 server" />
     
     <cfset Variables.cas_server = Arguments.cas_server & IIF(Right(Arguments.cas_server,1) is not "/",DE('/'),DE('')) />
-    <cfset Variables.service = Arguments.service />
     
     <cfset Variables.cas_proxy_callback_receive = Arguments.cas_proxy_callback_receive />
     <cfset Variables.cas_proxy_callback_retrieve = Arguments.cas_proxy_callback_retrieve />
