@@ -115,7 +115,7 @@
     <!--- Contact the CAS server to validate the ticket --->
     <cfhttp url="#Variables.cas_server#serviceValidate" method="get">
       <cfhttpparam name="ticket" value="#Arguments.service_ticket#" type="url" />
-      <cfhttpparam name="service" value="#Variables.service#" type="url" />
+      <cfhttpparam name="service" value="#Variables.requestedPage#" type="url" />
       <cfhttpparam name="pgtUrl" value="#Variables.cas_proxy_callback_receive#" type="url" />
     </cfhttp>
     
@@ -170,7 +170,11 @@
   
   <cffunction name="login" access="public" output="no" returntype="void" hint="Call CAS login page">
     <cfargument name="forceRenew" required="no" type="boolean" default="false" hint="Force them to provide primary authentication" />
-    <cflocation url="#Variables.cas_server#login?service=#Variables.service##Iif(Variables.renew OR Arguments.forceRenew,DE('&renew=true'),DE(''))##Iif(Variables.gateway,DE('&gateway=true'),DE(''))#" addtoken="no" />
+    
+    <!--- Encode service url before redirecting to the CAS server.
+          This is done for us by cfhttpparam when validating the service ticket. --->
+    <cfset encoded_service_url = URLEncodedFormat(Variables.requestedPage) />
+    <cflocation url="#Variables.cas_server#login?service=#encoded_service_url##Iif(Variables.renew OR Arguments.forceRenew,DE('&renew=true'),DE(''))##Iif(Variables.gateway,DE('&gateway=true'),DE(''))#" addtoken="no" />
   </cffunction>
   
   <cffunction name="logout" access="public" output="no" returntype="void" hint="Call CAS logout page">

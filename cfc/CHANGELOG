@@ -1,3 +1,4 @@
 v1.0 [2009-05-01] - Initial Release
 v1.1 [2009-11-05] - Added proxy ticket support, logging, and documentation. (John Dzak)
 [2011-03-28] - Changed PGT format expectation to be compatible with jasig CAS server. (Peter Nyberg)
+[2011-04-14] - Requested page used as service URL. (Peter Nyberg)

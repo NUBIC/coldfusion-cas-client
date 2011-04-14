@@ -1,4 +1,6 @@
-<!--- This file is a workaround for the problem caused by rubycas-server redirecting
+<!--- 2011-04-14 UPDATE: This is not needed when using the official jasig CAS server.
+
+      This file is a workaround for the problem caused by rubycas-server redirecting
       to a service url without a trailing '/'.  This is part of rubycas-server's 
       implementation to clean the url of trailing '/'.  The problem occurs
       when Coldfusion sees this url, it redirects to the same URL with a 
