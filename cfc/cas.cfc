@@ -83,6 +83,10 @@
         <cfset Variables.requestedPage = IIf(Variables.direct_forwarding,'Arguments.requestedPage','Variables.default_page') />
         <cfinvoke method="login" />
       <cfelse>
+        <cfif Len(Variables.requestedPage) EQ 0>
+          <cfset Variables.requestedPage = Arguments.requestedPage />
+        </cfif>
+        
         <cfinvoke method="serviceTicketValidate">
           <cfinvokeargument name="service_ticket" value="#service_ticket#" />
         </cfinvoke>
